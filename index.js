@@ -23,10 +23,24 @@ const server = http.createServer((req, res) => {
         res.statusCode = 200
         res.end("Users List: ");
     }
-    else if(url === "/login" && method === "POST"){
-        res.statusCode = 200
-        res.end("Login Here: ");
-    }
+    else if (url === "/login" && method === "POST") {
+  let body = "";
+
+  req.on("data", chunk => {
+    body += chunk.toString();
+  });
+
+  req.on("end", () => {
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+
+    res.end(JSON.stringify({
+      message: "Login data received",
+      data: body
+    }));
+  });
+}
+
     else if(url === "/login" && method === "GET"){
         res.statusCode = 200
         res.end("Login Here: ");
